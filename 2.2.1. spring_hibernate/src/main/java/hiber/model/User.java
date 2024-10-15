@@ -1,7 +1,7 @@
 package hiber.model;
 
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +20,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
     private Car car;
 
@@ -72,6 +72,19 @@ public class User {
 
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     @Override

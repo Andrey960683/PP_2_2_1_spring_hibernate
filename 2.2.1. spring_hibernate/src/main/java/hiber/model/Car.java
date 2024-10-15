@@ -1,8 +1,7 @@
 package hiber.model;
 
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Entity
 @Table(name = "car")
@@ -18,7 +17,7 @@ public class Car {
     @Column(name = "series")
     private int series;
 
-    @OneToOne(mappedBy = "car")
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private User user;
 
     public Car() {}
@@ -58,6 +57,19 @@ public class Car {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(id, car.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     @Override
